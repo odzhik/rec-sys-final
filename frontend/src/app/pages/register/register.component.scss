@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+.register-container {
+  display: flex;
+  max-width: 1000px;
+  margin: 50px auto;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  background-color: transparent; /* Убрал белый фон */
+  font-family: 'Poppins', sans-serif; /* Минималистичный шрифт */
+}
+
+.form-content {
+  padding: 40px;
+  width: 50%;
+}
+
+.illustration {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.illustration img {
+  max-width: 80%; 
+}
+
+h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: 600;
+}
+
+.input-container {
+  margin-bottom: 15px;
+}
+
+label {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 5px;
+  display: block;
+}
+
+input {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: transparent; /* Прозрачный фон */
+  transition: 0.3s ease;
+}
+
+input:focus {
+  border-color: #6c63ff;
+  outline: none;
+  box-shadow: 0 0 8px rgba(108, 99, 255, 0.3);
+}
+
+.btn-register {
+  width: 100%;
+  padding: 12px;
+  background-color: #6c63ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.btn-register:hover {
+  background-color: #4f4bbf;
+}
+
+.btn-register:active {
+  transform: scale(0.95);
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.login-link a {
+  color: #6c63ff;
+  text-decoration: none;
+}
+
+.google-login {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.google-login img {
+  width: 20px;
+}
+
+.google-login:hover {
+  background-color: #f2f2f2;
+}
+.error {
+  color: #e74c3c;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.success {
+  color: #27ae60;
+  font-size: 14px;
+  margin-top: 10px;
+  text-align: center;
+}

@@ -1,0 +1,13 @@
+<div class="interest-container">
+    <h3>Let’s make it <b>Personal</b></h3>
+    <p>Select your interests to get event suggestions based on what you love</p>
+    
+    <div class="buttons">
+      <button *ngFor="let interest of interests"
+              (click)="toggleInterest(interest)"
+              [class.selected]="selectedInterests.includes(interest)">
+        {{ interest }}
+      </button>
+    </div>
+  </div>
+  

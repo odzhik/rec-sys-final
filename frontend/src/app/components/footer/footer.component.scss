@@ -1,0 +1,182 @@
+/* Общие стили */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #121212;
+    color: white;
+    margin: 0;
+    padding: 0;
+}
+
+/* Стили футера */
+.footer {
+    background-color: #150050;
+    color: white;
+    padding: 40px 60px;
+}
+
+/* Контейнер футера */
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+/* Левая часть футера */
+.footer-left {
+  display: flex;
+  flex-direction: row; /* Меняем на горизонтальное расположение */
+  align-items: center; /* Выравниваем по центру */
+  gap: 64px; /* Расстояние между логотипом и кнопками */
+  max-width: 100%;
+}
+
+/* Логотип */
+.footer-left .logo {
+  display: flex;
+  align-items: center;
+}
+.footer-top {
+  display: flex;
+  align-items: center; /* Логотип и кнопки в одной линии */
+  gap: 20px;
+}
+.footer-left img {
+    max-width: 80px;
+    height: auto;
+    
+}
+
+/* Кнопки магазинов */
+.app-links {
+  display: flex;
+  gap: 15px; /* Увеличил расстояние между кнопками */
+}
+
+.app-links img {
+  width: 150px; /* Увеличил ширину */
+  border-radius: 10px;
+  transition: 0.3s ease;
+}
+
+.app-links img:hover {
+  transform: scale(1.1);
+}
+
+.footer-bottom-text {
+  font-size: 13px;
+  opacity: 0.7;
+  margin-top: 10px; /* Добавляем отступ сверху */
+}
+
+/* Правая часть футера */
+.footer-right {
+    display: flex;
+    justify-content: space-between;
+    width: 50%;
+    gap: 40px;
+}
+
+.info-block, .contact-block {
+    flex: 1;
+}
+
+.info-block ul {
+    list-style: none;
+    padding: 0;
+}
+
+.info-block li {
+    margin-bottom: 8px;
+}
+
+.info-block a {
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    opacity: 0.8;
+    transition: 0.3s ease;
+}
+
+.info-block a:hover {
+    color: #FDCB58;
+    opacity: 1;
+}
+
+/* Контакты */
+.contact-block h4 {
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.contact-block p {
+    font-size: 13px;
+    opacity: 0.8;
+    margin: 5px 0;
+}
+
+.contact-block a {
+    color: #FDCB58;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* Разделительная линия */
+hr {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    margin: 20px 0;
+}
+
+/* Нижняя часть футера */
+.footer-bottom {
+    text-align: center;
+    font-size: 12px;
+    opacity: 0.6;
+}
+
+/* Соцсети */
+.social-icons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.social-icons img {
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.social-icons img:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
+}
+
+/* 📱 Адаптивность для мобильных */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-right {
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .info-block, .contact-block {
+        margin-left: 0;
+        text-align: center;
+    }
+
+    .social-icons {
+        flex-wrap: wrap;
+    }
+}

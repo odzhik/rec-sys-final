@@ -1,0 +1,104 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: event_recommendation_platform-db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: event_platform
+    volumes:
+      - pgdata:/var/lib/postgresql/data  # Храним БД
+    ports:
+      - "5432:5432"
+    networks:
+      - custom_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: event_recommendation_platform-backend
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_USER: "postgres"
+      DB_PASSWORD: "1234"
+      DB_HOST: "db"
+      DB_PORT: "5432"
+      DB_NAME: "event_platform"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    networks:
+      - custom_network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8000"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  recommendation:
+    build:
+      context: ./recommendation
+      dockerfile: Dockerfile
+    container_name: event_recommendation_platform-recommendation
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+      backend:
+        condition: service_started
+    environment:
+      DATABASE_URL: "postgresql://postgres:1234@db:5432/event_platform"
+    ports:
+      - "8080:8080"
+    networks:
+      - custom_network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+        
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: event_recommendation_platform-frontend
+    restart: always
+    depends_on:
+      backend:
+        condition: service_started
+      recommendation:
+        condition: service_started
+    ports:
+      - "80:80"
+    networks:
+      - custom_network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:80"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  pgdata:
+    driver: local
+
+networks:
+  custom_network:
+    driver: bridge

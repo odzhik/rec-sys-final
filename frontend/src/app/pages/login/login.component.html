@@ -1,0 +1,51 @@
+<div class="login-container">
+  <div class="login-box">
+    <!-- Левая часть с логотипом -->
+    <div class="login-logo">
+      <img src="images/logo-icon.svg" alt="Login Image">
+    </div>
+
+    <!-- Правая часть с формой -->
+    <div class="login-form">
+      <h1>Login</h1>
+      <p>Login to your account in seconds</p>
+
+      <!-- Поле для ввода Email -->
+      <input 
+        type="email" 
+        [(ngModel)]="email"
+        placeholder="Email"
+        class="input-field"
+      />
+
+      <!-- Поле для ввода пароля -->
+      <input 
+        type="password" 
+        [(ngModel)]="password"
+        placeholder="Password"
+        class="input-field"
+      />
+
+      <!-- Чекбокс "Keep me logged in" -->
+      <div class="remember-me">
+        <input type="checkbox" id="remember" />
+        <label for="remember">Keep me logged in</label>
+      </div>
+
+      <!-- Отображение ошибки -->
+      <p *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </p>
+
+      <!-- Кнопка логина -->
+      <button (click)="login()" class="login-btn-main">
+        Log In
+      </button>
+
+      <!-- Альтернативный вход -->
+      <p class="sign-up">
+        Don't have an account? <a href="/signup">Sign up</a>
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+<div class="register-container">
+  <div class="form-content">
+    <h2>Create account</h2>
+
+    <form (submit)="register($event)">
+      <div class="input-container">
+        <label for="username">Имя</label>
+        <input type="text" id="username" [(ngModel)]="username" name="username" required />
+      </div>
+
+      <div class="input-container">
+        <label for="email">Email</label>
+        <input type="email" id="email" [(ngModel)]="email" name="email" required />
+      </div>
+
+      <div class="input-container">
+        <label for="password">Пароль</label>
+        <input type="password" id="password" [(ngModel)]="password" name="password" required />
+      </div>
+
+      <div class="input-container">
+        <label for="confirmPassword">Подтвердите пароль</label>
+        <input type="password" id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword" required />
+      </div>
+
+      <button type="submit" class="btn-register">Зарегистрироваться</button>
+
+      <p class="login-link">Уже есть аккаунт? <a href="/login">Войти здесь</a></p>
+
+      <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+      <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+
+      <div class="google-login">
+        <img src="images/google-icon.png" alt="google-icon" />
+        Войти через Google
+      </div>
+    </form>
+  </div>
+
+  <div class="illustration">
+    <img src="images/signup-illustration.png" alt="illustration" />
+  </div>
+</div>

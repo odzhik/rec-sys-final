@@ -1,0 +1,56 @@
+.event-container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+  
+    .event-image {
+      width: 100%;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+  
+    h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+    }
+  
+    .event-date {
+      color: gray;
+      margin-bottom: 15px;
+    }
+  
+    .event-price {
+      font-size: 20px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+  
+    .event-description {
+      margin-bottom: 30px;
+    }
+  
+    .buy-ticket-btn {
+      background-color: #4b50f7;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-bottom: 30px;
+  
+      &:hover {
+        background-color: #3a40e0;
+      }
+    }
+  
+    .reviews {
+      margin-top: 20px;
+      p {
+        background-color: #f9f9f9;
+        padding: 10px;
+        border-radius: 10px;
+        margin-bottom: 10px;
+      }
+    }
+  }
+  

@@ -1,0 +1,21 @@
+<div class="profile-container">
+    <h2>Профиль</h2>
+    <p><strong>Имя:</strong> {{ user?.name }}</p>
+
+    <p><strong>Email:</strong> {{ user?.email }}</p>
+  
+    <h3>Мои билеты</h3>
+  
+    <div *ngIf="tickets.length === 0">
+      <p>У вас пока нет купленных билетов.</p>
+    </div>
+  
+    <ul *ngIf="tickets.length > 0">
+      <li *ngFor="let ticket of tickets">
+        🎫 <strong>{{ ticket.event_name }}</strong> - {{ ticket.purchase_date | date:'dd.MM.yyyy' }}
+      </li>
+    </ul>
+  
+    <button (click)="logout()">Выйти</button>
+  </div>
+  

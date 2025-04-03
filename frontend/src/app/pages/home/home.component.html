@@ -1,0 +1,70 @@
+<!-- Карусель событий -->
+<div class="carousel-container">
+  <button class="arrow left" (click)="prevSlide()">&#9664;</button>
+
+  <div class="carousel" [ngStyle]="{'transform': 'translateX(' + carouselOffset + 'px)'}">
+    <div class="carousel-item" *ngFor="let event of carouselEvents">
+      <img [src]="event.image" alt="Event Image">
+    </div>
+  </div>
+
+  <button class="arrow right" (click)="nextSlide()">&#9654;</button>
+
+  <div class="indicators">
+    <span *ngFor="let item of carouselEvents; let i = index" 
+          [class.active]="i === currentSlideIndex" 
+          (click)="goToSlide(i)">
+    </span>
+  </div>
+</div>
+
+<!-- Recommended Events Section -->
+<app-recommended-events></app-recommended-events>
+
+<h2>События в Алматы</h2>
+<!-- Фильтр по дате -->
+<div class="date-selector">
+  <button (click)="prevWeek()">←</button>
+  <span>{{ availableDates.length > 0 ? availableDates[currentOffset].month + ' ' + availableDates[currentOffset].fullDate.split('.')[2] : '' }}</span>
+  <button (click)="nextWeek()">→</button>
+  
+</div>
+
+<div class="date-list">
+  <button 
+    *ngFor="let date of getDisplayedDates()" 
+    (click)="selectDate(date.fullDate)"
+    [class.selected]="selectedDate === date.fullDate">
+    <div>{{ date.day }} {{ date.month }}</div>
+    <div class="day-of-week">{{ date.dayOfWeek }}</div> <!-- Добавили день недели -->
+  </button>
+</div>
+
+<!-- Фильтр по категориям -->
+<div class="event-filters">
+  <button (click)="filterEvents('all')">Все события</button>
+  <button (click)="filterEvents('concerts')">Концерты</button>
+  <button (click)="filterEvents('movies')">Фильмы</button>
+  <button (click)="filterEvents('sport')">Спорт</button>
+  <button (click)="filterEvents('entertainment')">Развлечения</button>
+  <button (click)="filterEvents('other')">Другое</button>
+</div>
+
+<!-- Карточки событий -->
+<div class="events-grid">
+  <div class="event-card" *ngFor="let event of filteredEvents" (click)="goToEventPage(event)">
+    <img [src]="event.image" alt="Event Image">
+    <h3>{{ event.name }}</h3>
+    <p>{{ event.date }} - {{ event.location }}</p>
+    <span>{{ event.price }}$</span>
+  </div>
+</div>
+<app-interest-selector></app-interest-selector>
+
+<!-- Cashback Section -->
+<section class="cashback-section">   
+  <img src="images/cashback.png" alt="Cashback" class="cashback-image">
+</section>
+
+
+

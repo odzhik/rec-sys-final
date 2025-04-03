@@ -1,0 +1,32 @@
+<header class="header">
+  <div class="container">
+    <!-- Логотип -->
+    <div class="logo">
+      <a href="/">
+        <img src="images/logo.svg" alt="EventFinder Logo" />
+      </a>
+    </div>
+
+    <!-- Поисковая строка -->
+    <div class="search-bar">
+      <input type="text" placeholder="Search events..." />
+      <select>
+        <option value="astana">Astana</option>
+        <option value="almaty" selected>Almaty</option>
+      </select>
+      <button class="search-btn">🔍</button>
+    </div>
+
+    <!-- Авторизация -->
+    <div class="auth-section">
+      <span class="language">🌍 English</span>
+      <a *ngIf="!isAuthenticated" routerLink="/login" class="login-btn">Login</a>
+      <a *ngIf="!isAuthenticated" routerLink="/register" class="signup-btn">Sign Up</a>
+
+      <!-- Профиль вместо logout -->
+      <a *ngIf="isAuthenticated" routerLink="/profile" class="profile-icon">
+        <img src="images/user.png" alt="Profile" />
+      </a>
+    </div>
+  </div>
+</header>

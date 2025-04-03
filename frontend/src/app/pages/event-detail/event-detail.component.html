@@ -1,0 +1,48 @@
+<!-- Loading indicator -->
+<div *ngIf="loading" class="loading-container">
+  <p>Загрузка данных события...</p>
+</div>
+
+<!-- Error message -->
+<div *ngIf="errorMessage" class="error-container">
+  <h2>Ошибка</h2>
+  <p>{{ errorMessage }}</p>
+  <button (click)="goBack()" class="btn btn-primary">Вернуться на главную</button>
+</div>
+
+<!-- Event details -->
+<div *ngIf="event" class="event-container">
+  <h1>{{ event.name }}</h1>
+
+  <p>📅 Дата: {{ event.date }}</p>
+  <p>📍 Локация: {{ event.location }}</p>
+  <p>💰 Цена: {{ event.price === 0 ? 'Бесплатно' : event.price + ' KZT' }}</p>
+  <p class="event-tickets">🎟️ Билетов осталось: <strong>{{ event.available_tickets }}</strong> / {{ event.total_tickets }}</p>
+
+  <!-- Сообщение об успешной покупке -->
+  <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
+
+  <button (click)="buyTicket()" [disabled]="event.available_tickets === 0" class="btn btn-primary">
+    Купить билет
+  </button>
+  <button (click)="goBack()" class="btn btn-secondary">Назад</button>
+
+  <p *ngIf="event.available_tickets === 0" class="sold-out">❌ Все билеты проданы!</p>
+</div>
+
+
+      <!-- Форма для добавления отзыва -->
+      <!-- <div class="review-form">
+        <input type="text" [(ngModel)]="newReview" placeholder="Оставьте свой отзыв..." />
+        <button (click)="addReview()">Добавить отзыв</button>
+      </div> -->
+  
+      <!-- Блок с отзывами -->
+      <!-- <div class="reviews">
+        <h3>Отзывы:</h3>
+        <ul>
+          <li *ngFor="let review of reviews">{{ review }}</li>
+        </ul>
+      </div>
+    </div> -->
+  

@@ -1,0 +1,35 @@
+<!-- <div class="event-container" *ngIf="event">
+    <img [src]="event.image" alt="Event Image" class="event-image">
+    <h1>{{ event.name }}</h1>
+    <p class="event-date">{{ event.date }} | {{ event.location }}</p>
+    <p class="event-price">Price: {{ event.price }}$</p>
+    <p class="event-description">{{ event.description }}</p>
+  
+    <button class="buy-ticket-btn">Buy Ticket</button>
+  
+    <h3>Reviews</h3>
+    <div class="reviews">
+      <p>⭐️⭐️⭐️⭐️⭐️ Amazing event!</p>
+      <p>⭐️⭐️⭐️⭐️ So much fun!</p>
+    </div>
+  </div>
+   -->
+
+   
+
+   <!-- <h1>{{ eventData?.title }}</h1>
+   <p>Описание: {{ eventData?.description }}</p>
+   <p>Локация: {{ eventData?.location }}</p>
+   <p>Дата: {{ eventData?.date }}</p>
+   <p>Категория: {{ eventData?.category }}</p>
+   <p>Цена: {{ eventData?.price }} ₸</p> -->
+   <h1>{{ eventName }}</h1>
+
+   <div class="event-container">
+    <h1>{{ eventData?.title }}</h1>
+    <p>{{ eventData?.description }}</p>
+    <p><strong>Дата:</strong> {{ eventData?.date }}</p>
+    <p><strong>Цена:</strong> {{ eventData?.price }} ₸</p>
+    <img [src]="eventData?.image" alt="Event Image" class="event-image" />
+  </div>
+  
