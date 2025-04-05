@@ -23,7 +23,7 @@
   <p *ngIf="successMessage" class="success-message">{{ successMessage }}</p>
 
   <button (click)="buyTicket()" [disabled]="event.available_tickets === 0" class="btn btn-primary">
-    Купить билет
+    Забронировать билет
   </button>
   <button (click)="goBack()" class="btn btn-secondary">Назад</button>
 

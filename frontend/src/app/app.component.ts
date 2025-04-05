@@ -29,7 +29,8 @@ import { FooterComponent } from './components/footer/footer.component';
     HttpClientModule, 
     RouterModule, 
     HeaderComponent, 
-    FooterComponent
+    FooterComponent,
+    MatIconModule
   ],
 })
 export class AppComponent implements OnInit {

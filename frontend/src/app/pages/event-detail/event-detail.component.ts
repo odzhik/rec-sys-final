@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { RecommendationService } from '../../services/recommendation.service';
-import { environment } from '../../../environments/environment';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-event-detail',
@@ -14,36 +14,33 @@ import { environment } from '../../../environments/environment';
 })
 export class EventDetailComponent implements OnInit, OnDestroy {
   event: any;
-  userId: number = 12; // Заглушка
+  userId!: number;  // Теперь берем реальный ID
   successMessage: string = '';
   errorMessage: string = '';
   loading: boolean = true;
   
-  // For view tracking
   startTime: number = 0;
   eventId: number = 0;
-  private apiUrl = '/api'; // Use proxy path
+  private apiUrl = '/api';
 
   constructor(
     private route: ActivatedRoute, 
     private router: Router, 
     private http: HttpClient,
-    private recommendationService: RecommendationService
+    private recommendationService: RecommendationService,
+    private authService: AuthService  // ✅ добавили AuthService
   ) {}
 
   ngOnInit(): void {
+    this.userId = this.authService.getUserId();  // ✅ Получаем реальный userId
+
     this.eventId = Number(this.route.snapshot.paramMap.get('id'));
     
-    // Получаем данные о событии с сервера (используем API прокси)
     this.http.get(`${this.apiUrl}/events/${this.eventId}`).subscribe({
       next: (response) => {
         this.event = response;
         console.log('Данные о событии:', this.event);
-        
-        // Start tracking view time
         this.startTime = Date.now();
-        
-        // Record event click
         this.recordClick();
         this.loading = false;
       },
@@ -51,7 +48,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
         console.error('Ошибка загрузки события:', error);
         this.loading = false;
         if (error.status === 404) {
-          this.errorMessage = `Событие не найдено. Возможно, это демонстрационное событие, которое отсутствует в базе данных.`;
+          this.errorMessage = `Событие не найдено.`;
         } else {
           this.errorMessage = `Ошибка при загрузке события: ${error.message || 'Неизвестная ошибка'}`;
         }
@@ -60,14 +57,12 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   }
   
   ngOnDestroy(): void {
-    // Calculate view duration in seconds
     if (this.startTime > 0 && this.eventId > 0) {
-      const viewDuration = (Date.now() - this.startTime) / 1000; // Convert to seconds
+      const viewDuration = (Date.now() - this.startTime) / 1000;
       this.recordView(viewDuration);
     }
   }
   
-  // Record click for recommendation system
   recordClick(): void {
     if (this.eventId > 0) {
       this.recommendationService.recordClick(this.eventId).subscribe({
@@ -77,7 +72,6 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     }
   }
   
-  // Record view for recommendation system
   recordView(duration: number): void {
     if (this.eventId > 0) {
       this.recommendationService.recordView(this.eventId, duration).subscribe({
@@ -93,34 +87,27 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     }
 
     const payload = {
-      user_id: this.userId,
+      user_id: this.userId,  // ✅ Теперь реальный ID
       event_id: this.event.id
     };
 
-    // Формируем HTTP заголовки для запроса
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
 
-    // Используем прокси API вместо хардкода
     this.http.post(`${this.apiUrl}/buy_ticket`, payload, { headers }).subscribe({
       next: (response: any) => {
-        console.log('Билет успешно куплен:', response);
-        
-        // Уменьшаем количество доступных билетов локально
+        console.log('Билет успешно забронирован:', response);
         this.event.available_tickets = Math.max(0, this.event.available_tickets - 1);
+        this.successMessage = 'Билет успешно забронирован!';
         
-        // Показываем сообщение об успехе
-        this.successMessage = 'Билет успешно куплен!';
-        
-        // Скрываем сообщение через 3 секунды
         setTimeout(() => {
           this.successMessage = '';
         }, 3000);
       },
       error: (error) => {
         console.error('Ошибка при покупке билета:', error);
-        this.successMessage = 'Ошибка при покупке билета. Попробуйте позже.';
+        this.successMessage = 'Ошибка при бронировании билета. Попробуйте позже.';
       }
     });
   }

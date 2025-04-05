@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { InterestSelectorComponent } from '../../components/interest-selector/interest-selector.component';
 import { RecommendedEventsComponent } from '../../components/recommended-events/recommended-events.component';
 import { RecommendationService } from '../../services/recommendation.service';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +18,8 @@ import { RecommendationService } from '../../services/recommendation.service';
     RouterModule,
     FormsModule,
     InterestSelectorComponent,
-    RecommendedEventsComponent
+    RecommendedEventsComponent,
+    MatIconModule
   ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
@@ -29,6 +31,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   carouselOffset = 0;
   slideWidth = 0;
   autoSlideInterval: any;
+  popEventId: number | null = null;
 
   allDatesSelected = true;
   selectedDate: string = 'all';
@@ -45,7 +48,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.generateDates();
     this.fetchEvents();
-
+    this.loadLikesFromStorage();
     setTimeout(() => {
       const slide = document.querySelector('.carousel-item') as HTMLElement;
       this.slideWidth = slide?.offsetWidth || 0;
@@ -189,4 +192,37 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.stopAutoSlide();
   }
+  likedEvents: Set<number> = new Set();
+
+  toggleLike(eventId: number): void {
+    if (this.likedEvents.has(eventId)) {
+      this.likedEvents.delete(eventId);
+    } else {
+      this.likedEvents.add(eventId);
+  
+      // Анимация взрыва
+      this.popEventId = eventId;
+      setTimeout(() => {
+        this.popEventId = null;
+      }, 400); // должно совпадать с длиной animation
+    }
+  
+    this.saveLikesToStorage();
+  }
+  
+  
+  saveLikesToStorage(): void {
+    localStorage.setItem('likedEvents', JSON.stringify(Array.from(this.likedEvents)));
+  }
+  
+  loadLikesFromStorage(): void {
+    const stored = localStorage.getItem('likedEvents');
+    if (stored) {
+      this.likedEvents = new Set(JSON.parse(stored));
+    }
+  }
+  
+
+  
+
 }

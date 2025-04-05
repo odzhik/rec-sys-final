@@ -1,21 +1,59 @@
 <div class="profile-container">
+  <div class="profile-header">
     <h2>Профиль</h2>
     <p><strong>Имя:</strong> {{ user?.name }}</p>
-
     <p><strong>Email:</strong> {{ user?.email }}</p>
-  
-    <h3>Мои билеты</h3>
-  
-    <div *ngIf="tickets.length === 0">
-      <p>У вас пока нет купленных билетов.</p>
-    </div>
-  
-    <ul *ngIf="tickets.length > 0">
-      <li *ngFor="let ticket of tickets">
-        🎫 <strong>{{ ticket.event_name }}</strong> - {{ ticket.purchase_date | date:'dd.MM.yyyy' }}
-      </li>
-    </ul>
-  
-    <button (click)="logout()">Выйти</button>
   </div>
-  
+
+  <!-- Забронированные события -->
+  <h3 class="section-title">🎟️ Забронированные события</h3>
+  <div *ngIf="reservedEvents.length > 0; else noReservations">
+    <div class="events-grid">
+      <div class="event-card" *ngFor="let event of reservedEvents">
+        <img [src]="getImageForEvent(event.name)" alt="Event Image" />
+        <h4>{{ event.name }}</h4>
+        <p>{{ event.date | date:'dd.MM.yyyy' }} | {{ event.location }}</p>
+        <span>{{ event.price === 0 ? 'Бесплатно' : event.price + ' ₸' }}</span>
+
+        <div class="card-actions">
+          <button (click)="goToEvent(event.id)" class="event-button">
+            Перейти к событию
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #noReservations>
+    <p class="empty-msg">У вас нет забронированных событий.</p>
+  </ng-template>
+
+  <!-- Избранные события -->
+  <h3 class="section-title">❤️ Избранные события</h3>
+  <div *ngIf="likedEvents.length > 0; else noLiked">
+    <div class="events-grid">
+      <div class="event-card" *ngFor="let event of likedEvents">
+        <img [src]="event.image" alt="Event Image" />
+        <h4>{{ event.name }}</h4>
+        <p>{{ event.date }} | {{ event.location }}</p>
+        <span>{{ event.price }} ₸</span>
+
+        <div class="card-actions">
+          <button (click)="goToEvent(event.id)" class="event-button">
+            Перейти к событию
+          </button>
+          <button (click)="toggleLike(event.id)" class="like-btn liked">
+            <mat-icon>favorite</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #noLiked>
+    <p class="empty-msg">Вы ещё не добавили события в избранное.</p>
+  </ng-template>
+
+  <!-- Кнопка Выйти -->
+  <div class="logout-container">
+    <button (click)="logout()" class="logout-btn">🚪 Выйти</button>
+  </div>
+</div>

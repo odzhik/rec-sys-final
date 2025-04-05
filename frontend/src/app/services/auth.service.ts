@@ -33,22 +33,26 @@ export class AuthService {
 
   // Логин пользователя
   login(email: string, password: string): Observable<any> {
-    return this.http.post<{ access_token: string; refresh_token?: string }>(`${this.apiUrl}/login`, { email, password })
-      .pipe(
-        tap((response) => {
-          if (response.access_token) {
-            this.saveToken(response.access_token, response.refresh_token);
-            this.authState.next(true); // Уведомляем подписчиков об изменении состояния авторизации
-            
-          }
-        }),
-        catchError((error) => {
-          console.error('Ошибка авторизации:', error);
-          return throwError(() => error);
-        })
-        
-      );
+    return this.http.post<any>(`${this.apiUrl}/login`, { email, password }).pipe(
+      tap((response) => {
+        if (response.access_token) {
+          this.saveToken(response.access_token, response.refresh_token);
+          
+          // Получаем профиль после логина и сохраняем user_id
+          this.getProfile().subscribe(profile => {
+            localStorage.setItem('user_id', profile.id);
+          });
+  
+          this.authState.next(true);
+        }
+      }),
+      catchError((error) => {
+        console.error('Ошибка авторизации:', error);
+        return throwError(() => error);
+      })
+    );
   }
+  
 
   // Сохранение токенов в localStorage
   public saveToken(accessToken: string, refreshToken?: string) {
@@ -120,10 +124,11 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('access_token');
     localStorage.removeItem('refresh_token');
-    this.authState.next(false); // Сообщаем подписчикам, что пользователь вышел
+    localStorage.removeItem('user_id'); // ✅ ВАЖНО! Удаляем user_id
+    this.authState.next(false);
     window.location.href = '/login';
   }
-
+  
   // Получение данных пользователя из localStorage
   getUserData() {
     const userData = localStorage.getItem('user');
@@ -143,6 +148,10 @@ export class AuthService {
   getProfile(): Observable<any> {
     return this.http.get(`${this.apiUrl}/profile`, { headers: this.getAuthHeaders() });
   }
-
+  getUserId(): number {
+    // Временно можно возвращать фиксированный ID (например, с localStorage или заглушку)
+    return Number(localStorage.getItem('user_id')) || 12;
+  }
+  
   
 }

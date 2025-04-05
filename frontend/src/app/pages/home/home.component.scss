@@ -136,19 +136,7 @@ body {
   padding: 20px;
 }
 
-.event-card {
-  background-color: white;
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: 0.3s ease-in-out;
-  max-width: 300px; /* Ограничение ширины карточки */
-}
 
-.event-card:hover {
-  transform: translateY(-5px);
-}
 
 .event-card img {
   width: 100%;
@@ -295,4 +283,86 @@ h2::after {
   background: #7b5cf5;
   color: white;
   font-weight: bold;
+}
+.like-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: white;
+  border: none;
+  border-radius: 50%;
+  padding: 6px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+  z-index: 2;
+}
+
+.like-btn:hover mat-icon {
+  color: red;
+  transform: scale(1.2);
+}
+
+.like-btn mat-icon {
+  color: gray;
+  font-size: 20px;
+}
+
+.like-btn.liked mat-icon {
+  color: red;
+}
+
+
+.event-card {
+  background: white;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: 0.3s ease-in-out;
+  max-width: 300px;
+  position: relative;
+  padding: 1rem;
+  text-align: center;
+
+  &:hover {
+    background-color: #ffe5e5; /* краснеет фон */
+    transform: translateY(-5px);
+  }
+}
+
+.event-price-box {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 6px 14px;
+  background-color: #4caf50; /* зелёная кнопка */
+  color: white;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 16px;
+  transition: 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+// Вспышка при лайке
+.heart-pop {
+  animation: heartExplosion 0.4s ease;
+}
+
+@keyframes heartExplosion {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  30% {
+    transform: scale(1.4);
+    opacity: 0.9;
+  }
+  60% {
+    transform: scale(0.95);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }

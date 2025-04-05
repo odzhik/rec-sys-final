@@ -53,12 +53,28 @@
 <!-- Карточки событий -->
 <div class="events-grid">
   <div class="event-card" *ngFor="let event of filteredEvents" (click)="goToEventPage(event)">
-    <img [src]="event.image" alt="Event Image">
+    <img [src]="event.image" alt="Event Image" />
     <h3>{{ event.name }}</h3>
-    <p>{{ event.date }} - {{ event.location }}</p>
-    <span>{{ event.price }}$</span>
+    <p>{{ event.date }} | {{ event.location }}</p>
+    <div class="event-price-box">
+      {{ event.price }} ₸
+    </div>
+    
+
+    <!-- Кнопка лайка внутри карточки -->
+    <button
+  (click)="toggleLike(event.id); $event.stopPropagation()"
+  class="like-btn"
+  [class.liked]="likedEvents.has(event.id)"
+  [class.heart-pop]="popEventId === event.id">
+  <mat-icon>favorite</mat-icon>
+  <span class="heart-explosion" *ngIf="popEventId === event.id"></span>
+</button>
+
+
   </div>
 </div>
+
 <app-interest-selector></app-interest-selector>
 
 <!-- Cashback Section -->

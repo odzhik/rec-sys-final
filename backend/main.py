@@ -69,7 +69,7 @@ def get_db():
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # 👈 Разрешаем ВСЁ для разработки
+    allow_origins=["*"],  #  Разрешаем ВСЁ для разработки
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -226,8 +226,8 @@ class TicketRequest(BaseModel):
     event_id: int
 
 @app.post("/buy_ticket")
-async def buy_ticket(request: TicketRequest):
-    # Проверяем, есть ли билеты в наличии
+async def buy_ticket(request: TicketRequest, db: Session = Depends(get_db)):
+    # Проверяем наличие билетов
     cursor.execute("SELECT available_tickets FROM events WHERE id = %s", (request.event_id,))
     result = cursor.fetchone()
 
@@ -246,9 +246,34 @@ async def buy_ticket(request: TicketRequest):
     )
     conn.commit()
 
-    
+    # 🔥 ВАЖНО: добавляем запись в таблицу Ticket
+    new_ticket = models.Ticket(
+        user_id=request.user_id,
+        event_id=request.event_id,
+    )
+    db.add(new_ticket)
+    db.commit()
 
     return {"message": f"Билет на событие {request.event_id} куплен пользователем {request.user_id}"}
+
+
+# Эндпоинт для получения всех забронированных событий пользователя
+@app.get("/reservations/{user_id}", response_model=list[schemas.EventOut])
+def get_user_reservations(user_id: int, db: Session = Depends(get_db)):
+    tickets = db.query(models.Ticket).filter(models.Ticket.user_id == user_id).all()
+
+    if not tickets:
+        raise HTTPException(status_code=404, detail="Нет забронированных событий")
+
+    events = []
+    for ticket in tickets:
+        event = db.query(models.Event).filter(models.Event.id == ticket.event_id).first()
+        if event:
+            events.append(event)
+
+    return events
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)

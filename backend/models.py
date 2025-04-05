@@ -42,3 +42,4 @@ class Ticket(Base):
 
     user = relationship("User", back_populates="tickets")
     event = relationship("Event", back_populates="tickets")
+
