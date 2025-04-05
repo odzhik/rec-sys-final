@@ -10,16 +10,9 @@
   font-family: 'Arial', sans-serif;
 }
 
-/* Loading container */
-.loading-container {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 25px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-family: 'Arial', sans-serif;
+.loading-container,
+.error-container {
+  @extend .event-container;
 }
 
 .loading-container p {
@@ -28,16 +21,7 @@
   margin: 15px 0;
 }
 
-/* Error container */
 .error-container {
-  max-width: 800px;
-  margin: 40px auto;
-  padding: 25px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-family: 'Arial', sans-serif;
   border-left: 5px solid #ff3333;
 }
 
@@ -54,7 +38,6 @@
   line-height: 1.5;
 }
 
-/* Заголовок */
 h1 {
   font-size: 28px;
   font-weight: bold;
@@ -62,7 +45,6 @@ h1 {
   margin-bottom: 15px;
 }
 
-/* Дата, локация, цена */
 p {
   font-size: 18px;
   color: #444;
@@ -73,7 +55,6 @@ p {
   gap: 8px;
 }
 
-/* Кнопки */
 button {
   padding: 12px 20px;
   font-size: 16px;
@@ -89,7 +70,6 @@ button {
   background: #ff6600;
   color: white;
 }
-
 .btn-primary:hover {
   background: #cc5500;
 }
@@ -98,12 +78,10 @@ button {
   background: #ddd;
   color: #333;
 }
-
 .btn-secondary:hover {
   background: #bbb;
 }
 
-/* Оповещение о билетах */
 .sold-out {
   font-size: 18px;
   font-weight: bold;
@@ -111,7 +89,6 @@ button {
   margin-top: 15px;
 }
 
-/* Билеты */
 .event-tickets {
   font-size: 20px;
   font-weight: bold;
@@ -119,21 +96,6 @@ button {
   margin: 15px 0;
 }
 
-/* Адаптация под мобильные */
-@media (max-width: 600px) {
-  .event-container, .loading-container, .error-container {
-      width: 90%;
-  }
-
-  p {
-      flex-direction: column;
-      gap: 5px;
-  }
-
-  button {
-      width: 100%;
-  }
-}
 .success-message {
   font-size: 18px;
   color: green;
@@ -144,9 +106,37 @@ button {
 
 @keyframes fadeIn {
   from {
-      opacity: 0;
+    opacity: 0;
   }
   to {
-      opacity: 1;
+    opacity: 1;
+  }
+}
+
+.mini-map-container {
+  height: 300px;
+  width: 100%;
+  max-width: 720px;
+  margin: 20px auto;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  border: 2px solid #f2f2f2;
+  position: relative;
+}
+
+
+@media (max-width: 600px) {
+  .event-container, .loading-container, .error-container {
+    width: 90%;
+  }
+
+  p {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  button {
+    width: 100%;
   }
 }

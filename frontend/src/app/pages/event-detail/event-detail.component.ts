@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { RecommendationService } from '../../services/recommendation.service';
 import { AuthService } from '../../services/auth.service';
+import * as L from 'leaflet';
 
 @Component({
   selector: 'app-event-detail',
@@ -14,55 +15,59 @@ import { AuthService } from '../../services/auth.service';
 })
 export class EventDetailComponent implements OnInit, OnDestroy {
   event: any;
-  userId!: number;  // Теперь берем реальный ID
+  userId!: number;
   successMessage: string = '';
   errorMessage: string = '';
   loading: boolean = true;
-  
+
   startTime: number = 0;
   eventId: number = 0;
   private apiUrl = '/api';
+  map: any;
 
   constructor(
     private route: ActivatedRoute, 
     private router: Router, 
     private http: HttpClient,
     private recommendationService: RecommendationService,
-    private authService: AuthService  // ✅ добавили AuthService
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
-    this.userId = this.authService.getUserId();  // ✅ Получаем реальный userId
-
+    this.userId = this.authService.getUserId();
     this.eventId = Number(this.route.snapshot.paramMap.get('id'));
-    
+
     this.http.get(`${this.apiUrl}/events/${this.eventId}`).subscribe({
       next: (response) => {
         this.event = response;
-        console.log('Данные о событии:', this.event);
+
+        // Заглушка координат (если пока нет с бэка)
+        if (!this.event.latitude || !this.event.longitude) {
+          this.event.latitude = 43.238949;
+          this.event.longitude = 76.889709;
+        }
+
         this.startTime = Date.now();
         this.recordClick();
         this.loading = false;
+
+        setTimeout(() => this.initMap(), 0);
       },
       error: (error) => {
         console.error('Ошибка загрузки события:', error);
         this.loading = false;
-        if (error.status === 404) {
-          this.errorMessage = `Событие не найдено.`;
-        } else {
-          this.errorMessage = `Ошибка при загрузке события: ${error.message || 'Неизвестная ошибка'}`;
-        }
+        this.errorMessage = error.status === 404 ? `Событие не найдено.` : `Ошибка при загрузке события: ${error.message || 'Неизвестная ошибка'}`;
       }
     });
   }
-  
+
   ngOnDestroy(): void {
     if (this.startTime > 0 && this.eventId > 0) {
       const viewDuration = (Date.now() - this.startTime) / 1000;
       this.recordView(viewDuration);
     }
   }
-  
+
   recordClick(): void {
     if (this.eventId > 0) {
       this.recommendationService.recordClick(this.eventId).subscribe({
@@ -71,7 +76,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
       });
     }
   }
-  
+
   recordView(duration: number): void {
     if (this.eventId > 0) {
       this.recommendationService.recordView(this.eventId, duration).subscribe({
@@ -82,12 +87,10 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   }
 
   buyTicket(): void {
-    if (!this.event || this.event.available_tickets <= 0) {
-      return;
-    }
+    if (!this.event || this.event.available_tickets <= 0) return;
 
     const payload = {
-      user_id: this.userId,  // ✅ Теперь реальный ID
+      user_id: this.userId,
       event_id: this.event.id
     };
 
@@ -100,10 +103,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
         console.log('Билет успешно забронирован:', response);
         this.event.available_tickets = Math.max(0, this.event.available_tickets - 1);
         this.successMessage = 'Билет успешно забронирован!';
-        
-        setTimeout(() => {
-          this.successMessage = '';
-        }, 3000);
+        setTimeout(() => this.successMessage = '', 3000);
       },
       error: (error) => {
         console.error('Ошибка при покупке билета:', error);
@@ -114,5 +114,34 @@ export class EventDetailComponent implements OnInit, OnDestroy {
 
   goBack(): void {
     this.router.navigate(['/']);
+  }
+
+  initMap(): void {
+    const lat = this.event.latitude;
+    const lng = this.event.longitude;
+
+    this.map = L.map('mini-map', {
+      center: [lat, lng],
+      zoom: 15,
+      scrollWheelZoom: false,
+      zoomControl: false,
+      dragging: false,
+      doubleClickZoom: false,
+      boxZoom: false,
+      keyboard: false,
+
+    });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(this.map);
+
+    const icon = L.icon({
+      iconUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png',
+      shadowUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-shadow.png',
+      
+    });
+
+    L.marker([lat, lng], { icon }).addTo(this.map);
   }
 }
