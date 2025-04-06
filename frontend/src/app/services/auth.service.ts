@@ -41,6 +41,7 @@ export class AuthService {
           // Получаем профиль после логина и сохраняем user_id
           this.getProfile().subscribe(profile => {
             localStorage.setItem('user_id', profile.id);
+            localStorage.setItem('user_name', profile.username); 
           });
   
           this.authState.next(true);
@@ -152,6 +153,11 @@ export class AuthService {
     // Временно можно возвращать фиксированный ID (например, с localStorage или заглушку)
     return Number(localStorage.getItem('user_id')) || 12;
   }
+
+  getUserName(): string | null {
+    return localStorage.getItem('user_name');
+  }
+  
   
   
 }

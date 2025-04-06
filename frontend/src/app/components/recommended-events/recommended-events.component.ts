@@ -141,13 +141,25 @@ export class RecommendedEventsComponent implements OnInit {
 
   loadRecommendations(): void {
     this.loading = true;
+
+    const imageMap: { [key: string]: string } = {
+      'Jazz Night': '/images/jazz.jpg',
+      'Startup Pitch': '/images/startup.png',
+      'Movie Premiere': '/images/movie.jpg',
+      'Food Festival': '/images/food-fest.jpg',
+      'Art Exhibition': '/images/art.jpg',
+      'Stand-up Show': '/images/standup.jpg',
+      'Classical Concert': '/images/classical.jpg',
+      'Fitness Expo': '/images/fitness.jpeg',
+      'Movie Night: Interstellar': '/images/interstellar.jpg',
+      'Tech Meetup': '/images/event1.jpg'
+    };
+
     this.recommendationService.getRecommendations(4).subscribe({
       next: (events) => {
         this.recommendedEvents = events.map(event => ({
           ...event,
-          image: event.image_url?.startsWith('/images/')
-            ? event.image_url
-            : '/images/placeholder.jpg'
+          image: imageMap[event.name] || '/images/placeholder.jpg'
         }));
         this.loading = false;
       },
@@ -171,3 +183,4 @@ export class RecommendedEventsComponent implements OnInit {
     this.recommendationService.recordClick(event.id).subscribe();
   }
 }
+

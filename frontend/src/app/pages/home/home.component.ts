@@ -7,7 +7,7 @@ import { InterestSelectorComponent } from '../../components/interest-selector/in
 import { RecommendedEventsComponent } from '../../components/recommended-events/recommended-events.component';
 import { RecommendationService } from '../../services/recommendation.service';
 import { MatIconModule } from '@angular/material/icon';
-
+import { AuthService } from '../../services/auth.service';
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -32,7 +32,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   slideWidth = 0;
   autoSlideInterval: any;
   popEventId: number | null = null;
-
+  userName: string | null = null;
   allDatesSelected = true;
   selectedDate: string = 'all';
   availableDates: { day: string; month: string; fullDate: string; dayOfWeek: string }[] = [];
@@ -42,17 +42,21 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private http: HttpClient,
-    private recommendationService: RecommendationService
+    private recommendationService: RecommendationService,
+    private authService: AuthService
   ) {}
 
   ngOnInit(): void {
     this.generateDates();
     this.fetchEvents();
     this.loadLikesFromStorage();
+
+    
     setTimeout(() => {
-      const slide = document.querySelector('.carousel-item') as HTMLElement;
-      this.slideWidth = slide?.offsetWidth || 0;
-    }, 0);
+      const container = document.querySelector('.carousel-container') as HTMLElement;
+      this.slideWidth = container?.offsetWidth || 0;
+      this.updateCarouselPosition(); // обязательно!
+    }, 100);
 
     this.startAutoSlide();
   }
